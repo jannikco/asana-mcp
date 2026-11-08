@@ -1,49 +1,67 @@
-# Asana MCP setup and connection checker
+# Asana MCP server
 
-Generate Asana MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.
+Confirm your identity and inspect workspace access before preparing project reports.
 
-Maintainer: jannikco · License: MIT · Verification: **mock-only**
+A direct-provider MCP server with useful local execution. No PipMCP account is required for local use. Provider API access and any provider charges are your responsibility.
 
 ## Quick start
 
-Requires Node.js 22 or later.
+Requires Node.js22+. Clone this repository, then run:
 
 ```sh
-npm ci
+npm ci --ignore-scripts
 npm test
 npm start
 ```
 
-The default example runs locally without credentials and makes no external changes. Verification status describes recorded evidence; local configuration tests do not establish that provider authentication or execution works.
+The default command inspects the tools offline. Configure your own credentials in your environment:
 
-## Connect asana
+- `ASANA_ACCESS_TOKEN`
 
-[Create or sign in to PipMCP](https://pipmcp.com/register?app=asana&utm_source=github&utm_campaign=github-asana-mcp) and select the integration. Connect your authorized provider account and copy its hosted MCP endpoint. Set PIPMCP_ENDPOINT and, if required, PIPMCP_TOKEN in your environment. Run npm start to produce client configuration; run npm start -- --live for a read-only connection check. Provider app presence is catalog evidence, not live verification.
 
-## Managed service
 
-[Continue with PipMCP](https://pipmcp.com/register?app=asana&utm_source=github&utm_campaign=github-asana-mcp). This repository is maintained by the integration team and does not imply endorsement by LinkedIn or other providers.
+Credential help: https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml
 
-## Provenance and support
+## Execute a real read
 
-Source revision: ab800eafb3654d70507b061d15720eca1e600954db774267c96ef78127bfd2fd. The complete manifest is in integration.json; SHA256SUMS covers the reviewed artifact. Open a repository issue without credentials or personal data. See SECURITY.md for sensitive reports. No telemetry is sent by this code; signup links include explicit campaign parameters.
+Replace example record IDs with records you are authorized to access.
 
-## Provider setup inventory
-
-Run `npm start -- --setup` to inspect this app's recorded authentication requirements and setup links offline. Credentials are entered in PipMCP; this repository lists required field names only.
-
-```json
-{
-  "type": "bearer",
-  "requiredCredentialFields": [
-    "token"
-  ],
-  "requiredHeaderNames": [],
-  "helpUrl": "https://developers.asana.com/docs/personal-access-token",
-  "tenantRequired": false,
-  "accountParameterNames": []
-}
+```sh
+npm start -- --call get_current_user '{}'
 ```
 
-Provider documentation: https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml
-Provider website: https://asana.com/
+## Use with an MCP client
+
+Launch `node /absolute/path/asana-mcp/server.mjs` using stdio transport; pass credentials through the client environment. Stdout is reserved for JSON-RPC.
+
+## Tools
+
+| Tool | Effect | Purpose |
+| --- | --- | --- |
+| get_current_user | Read | Read the authorized Asana user. |
+| list_workspaces | Read | Read accessible Asana workspaces. |
+
+## Concrete workflow
+
+Confirm your identity and inspect workspace access before preparing project reports.
+
+1. get_current_user
+2. list_workspaces
+
+## Optional writes
+
+Writes are disabled by default. Set CONNECTOR_ALLOW_WRITES=true and supply `_approval: {approved:true,idempotencyKey:"unique-request-id"}` on the specific call. Do not reuse a key for a different request. Uncertain outcomes are never automatically replayed; inspect the provider before another attempt.
+
+## Capability evidence
+
+Local: **Tested — HTTP fixtures and real stdio tools/call**. Managed: **Documented**. Provider authentication and live operations have not been established by these fixture tests. Evidence applies per operation and execution mode; setup discovery does not imply provider execution.
+
+## Managed production
+
+[Activate with PipMCP](https://pipmcp.com/github/start?app=asana&integration=asana-mcp&utm_source=github&utm_campaign=github-asana-mcp&utm_content=readme) when you want the hosted service.  Local credentials are not uploaded by this code. Review provider permissions in the managed onboarding. [Directory and related projects](https://jannikco.github.io/pipmcp-connectors/integrations/asana/).
+
+## Provenance and maintenance
+
+- https://developers.asana.com/reference/getworkspaces
+
+Maintainer:jannikco. MIT license for this code. See connector.json for selected operations and integration.json for evidence. Runtime dependencies retain their own licenses. Report sensitive issues through https://pipmcp.com/contact; do not post credentials or customer data in public issues.

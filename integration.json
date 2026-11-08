@@ -5,20 +5,22 @@
   "releaseEligible": true,
   "maintainer": "jannikco",
   "license": "MIT",
-  "sourceRevision": "ab800eafb3654d70507b061d15720eca1e600954db774267c96ef78127bfd2fd",
+  "sourceRevision": "efa4920bcfef2f2ee121f6171d8b349ca0a171204843f0cd671f973fc19fd9ce",
   "evidence": [
-    "Source-backed provider setup metadata",
-    "Offline configuration and MCP protocol tests"
+    "Actual tools/call and direct-provider request contract tests"
   ],
   "provenance": [
-    "https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml"
+    "https://developers.asana.com/reference/getworkspaces"
   ],
   "id": "asana-mcp",
-  "kind": "mcp-setup",
+  "kind": "provider-connector",
   "product": "pipmcp",
-  "title": "Asana MCP setup and connection checker",
-  "description": "Generate Asana MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.",
-  "operationIds": [],
+  "title": "Asana MCP server",
+  "description": "Confirm your identity and inspect workspace access before preparing project reports.",
+  "operationIds": [
+    "get_current_user",
+    "list_workspaces"
+  ],
   "appSlug": "asana",
   "appName": "Asana",
   "providerDocs": "https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml",
@@ -28,10 +30,219 @@
     "requiredCredentialFields": [
       "token"
     ],
+    "settings": {},
     "requiredHeaderNames": [],
     "helpUrl": "https://developers.asana.com/docs/personal-access-token",
     "tenantRequired": false,
     "accountParameterNames": []
   },
-  "attributionSlug": "github-asana-mcp"
+  "attributionSlug": "github-asana-mcp",
+  "artifactType": "connector",
+  "qualityVersion": 2,
+  "connectorId": "asana",
+  "connector": {
+    "id": "asana",
+    "name": "Asana",
+    "version": "0.2.0",
+    "baseUrl": "https://app.asana.com/api/1.0",
+    "auth": {
+      "type": "bearer",
+      "env": "ASANA_ACCESS_TOKEN"
+    },
+    "tools": [
+      {
+        "name": "get_current_user",
+        "description": "Read the authorized Asana user.",
+        "method": "GET",
+        "path": "/users/me",
+        "readOnly": true,
+        "inputSchema": {
+          "type": "object",
+          "properties": {},
+          "required": [],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [],
+          "query": {},
+          "body": {}
+        },
+        "sampleArguments": {},
+        "provenance": [
+          "https://developers.asana.com/reference/getuser"
+        ]
+      },
+      {
+        "name": "list_workspaces",
+        "description": "Read accessible Asana workspaces.",
+        "method": "GET",
+        "path": "/workspaces",
+        "readOnly": true,
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "limit": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "offset": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "description": "Identifier"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "bindings": {
+          "path": [],
+          "query": {
+            "limit": "limit",
+            "offset": "offset"
+          },
+          "body": {}
+        },
+        "sampleArguments": {},
+        "provenance": [
+          "https://developers.asana.com/reference/getworkspaces"
+        ],
+        "pagination": {
+          "type": "cursor",
+          "cursorInput": "offset",
+          "nextCursorPath": "next_page.offset"
+        }
+      }
+    ],
+    "workflow": {
+      "name": "Workspace inventory",
+      "description": "Confirm your identity and inspect workspace access before preparing project reports.",
+      "steps": [
+        "get_current_user",
+        "list_workspaces"
+      ]
+    },
+    "provenance": [
+      "https://developers.asana.com/reference/getworkspaces"
+    ],
+    "verification": "mock-only",
+    "providerLiveValidation": "not-run",
+    "capabilityEvidence": {
+      "local": {
+        "level": "Tested",
+        "operations": [
+          {
+            "name": "get_current_user",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          },
+          {
+            "name": "list_workspaces",
+            "level": "Tested",
+            "evidenceRefs": [
+              "Provider request/stdio contract tests"
+            ],
+            "method": "contract-fixture"
+          }
+        ],
+        "evidenceRefs": [
+          "Provider request/stdio contract tests"
+        ],
+        "mode": "local"
+      },
+      "managed": {
+        "level": "Documented",
+        "operations": [
+          {
+            "name": "get_current_user",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          },
+          {
+            "name": "list_workspaces",
+            "level": "Documented",
+            "evidenceRefs": [],
+            "method": "documentation"
+          }
+        ],
+        "evidenceRefs": [],
+        "mode": "managed"
+      }
+    },
+    "repoId": "asana-mcp",
+    "appSlug": "asana",
+    "product": "pipmcp",
+    "artifactType": "connector",
+    "sourceRevision": "efa4920bcfef2f2ee121f6171d8b349ca0a171204843f0cd671f973fc19fd9ce",
+    "authentication": {
+      "type": "bearer",
+      "requiredCredentialFields": [
+        "token"
+      ],
+      "settings": {},
+      "requiredHeaderNames": [],
+      "helpUrl": "https://developers.asana.com/docs/personal-access-token",
+      "tenantRequired": false,
+      "accountParameterNames": []
+    },
+    "managedAvailability": {
+      "status": "listed",
+      "checkedAt": "2026-11-08T12:29:10.433747+00:00"
+    }
+  },
+  "capabilityEvidence": {
+    "local": {
+      "level": "Tested",
+      "operations": [
+        {
+          "name": "get_current_user",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        },
+        {
+          "name": "list_workspaces",
+          "level": "Tested",
+          "evidenceRefs": [
+            "Provider request/stdio contract tests"
+          ],
+          "method": "contract-fixture"
+        }
+      ],
+      "evidenceRefs": [
+        "Provider request/stdio contract tests"
+      ],
+      "mode": "local"
+    },
+    "managed": {
+      "level": "Documented",
+      "operations": [
+        {
+          "name": "get_current_user",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        },
+        {
+          "name": "list_workspaces",
+          "level": "Documented",
+          "evidenceRefs": [],
+          "method": "documentation"
+        }
+      ],
+      "evidenceRefs": [],
+      "mode": "managed"
+    }
+  },
+  "utility": {
+    "problem": "Confirm your identity and inspect workspace access before preparing project reports.",
+    "output": "Actual provider API results through local MCP tools"
+  }
 }
