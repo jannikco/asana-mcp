@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "status": "ready",
+  "verification": "mock-only",
+  "releaseEligible": true,
+  "maintainer": "jannikco",
+  "license": "MIT",
+  "sourceRevision": "ab800eafb3654d70507b061d15720eca1e600954db774267c96ef78127bfd2fd",
+  "evidence": [
+    "Source-backed provider setup metadata",
+    "Offline configuration and MCP protocol tests"
+  ],
+  "provenance": [
+    "https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml"
+  ],
+  "id": "asana-mcp",
+  "kind": "mcp-setup",
+  "product": "pipmcp",
+  "title": "Asana MCP setup and connection checker",
+  "description": "Generate Asana MCP client configuration, inspect available tools and validate hosted endpoint access through PipMCP.",
+  "operationIds": [],
+  "appSlug": "asana",
+  "appName": "Asana",
+  "providerDocs": "https://raw.githubusercontent.com/Asana/openapi/master/defs/asana_oas.yaml",
+  "providerWebsite": "https://asana.com/",
+  "authentication": {
+    "type": "bearer",
+    "requiredCredentialFields": [
+      "token"
+    ],
+    "requiredHeaderNames": [],
+    "helpUrl": "https://developers.asana.com/docs/personal-access-token",
+    "tenantRequired": false,
+    "accountParameterNames": []
+  },
+  "attributionSlug": "github-asana-mcp"
+}
