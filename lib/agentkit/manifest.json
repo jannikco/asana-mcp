@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "version": "1.0.0",
+  "product": "pipmcp",
+  "credential": "PIPMCP_API_KEY",
+  "skills": [
+    {
+      "name": "pipmcp-asana",
+      "description": "Connect AI agents to Asana using one PipMCP API key and actual hosted tool discovery."
+    }
+  ],
+  "files": {
+    "skills/pipmcp-asana/SKILL.md": "621d8552c7940b77d0f53996a2a36426305a0c70d6546550d502eafd9350c86d"
+  }
+}
